@@ -1,42 +1,20 @@
+/** Community Wayfinding: global route shell keeps product navigation visible across patient, provider, and editorial views. */
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import type { Language } from "@/data/mockData";
+import About from "@/pages/About";
+import DoctorDashboard from "@/pages/DoctorDashboard";
+import Home from "@/pages/Home";
+import HowItWorks from "@/pages/HowItWorks";
 import NotFound from "@/pages/NotFound";
+import PatientDashboard from "@/pages/PatientDashboard";
+import { useState } from "react";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
 
-
-function Router() {
-  return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
-
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
-function App() {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
-
+function RoutedApplication({ language }: { language: Language }) { return <Switch><Route path="/">{() => <Home language={language} />}</Route><Route path="/patient" component={PatientDashboard} /><Route path="/doctor" component={DoctorDashboard} /><Route path="/how-it-works" component={HowItWorks} /><Route path="/about" component={About} /><Route path="/404" component={NotFound} /><Route component={NotFound} /></Switch>; }
+function App() { const [language, setLanguage] = useState<Language>("en"); return <ErrorBoundary><ThemeProvider defaultTheme="light"><TooltipProvider><Toaster /><div className="min-h-screen bg-[var(--canvas)]"><Header language={language} setLanguage={setLanguage} /><RoutedApplication language={language} /><Footer /></div></TooltipProvider></ThemeProvider></ErrorBoundary>; }
 export default App;
