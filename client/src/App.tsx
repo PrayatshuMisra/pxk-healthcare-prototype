@@ -1,6 +1,7 @@
-/** Community Wayfinding: global route shell makes screening, history, analytics, and transparent model reasoning visible across the complete product journey. */
+/** Community Wayfinding: global route shell keeps consent-gated, language-aware screening and local record tools available across the care journey. */
 import "./screens.css";
 import "./route-engine.css";
+import "./consent-export.css";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
@@ -19,7 +20,6 @@ import { useState } from "react";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-
-function RoutedApplication({ language }: { language: Language }) { return <Switch><Route path="/">{() => <Home language={language} />}</Route><Route path="/patient" component={PatientDashboard} /><Route path="/history" component={PatientHistory} /><Route path="/analytics" component={AnalyticsDashboard} /><Route path="/model" component={ModelCard} /><Route path="/doctor" component={DoctorDashboard} /><Route path="/how-it-works" component={HowItWorks} /><Route path="/about" component={About} /><Route path="/404" component={NotFound} /><Route component={NotFound} /></Switch>; }
+function RoutedApplication({ language }: { language: Language }) { return <Switch><Route path="/">{() => <Home language={language} />}</Route><Route path="/patient" component={PatientDashboard} /><Route path="/history">{() => <PatientHistory language={language} />}</Route><Route path="/analytics" component={AnalyticsDashboard} /><Route path="/model" component={ModelCard} /><Route path="/doctor" component={DoctorDashboard} /><Route path="/how-it-works" component={HowItWorks} /><Route path="/about" component={About} /><Route path="/404" component={NotFound} /><Route component={NotFound} /></Switch>; }
 function App() { const [language, setLanguage] = useState<Language>("en"); return <ErrorBoundary><ThemeProvider defaultTheme="light"><TooltipProvider><Toaster /><div className="min-h-screen bg-[var(--canvas)]"><Header language={language} setLanguage={setLanguage} /><RoutedApplication language={language} /><Footer /></div></TooltipProvider></ThemeProvider></ErrorBoundary>; }
 export default App;

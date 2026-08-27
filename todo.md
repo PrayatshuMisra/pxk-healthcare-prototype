@@ -23,3 +23,11 @@
 - [x] Add a dedicated decision-support report view to the screening result and patient-history record detail.
 - [x] Add a model card that explains what the prototype engine does, does not do, and which answers it used.
 - [x] Test routine and priority-review paths, then save and deliver the completed iteration.
+
+## Privacy, Language, and Clinician Export Upgrade
+
+- [x] Define and implement browser-local consent acknowledgement before a screening workflow begins.
+- [x] Add English, Kannada-ready, and clearly labelled Tulu placeholder copy for screening and routing rationale states.
+- [x] Add a clinician review export with the screening summary, selected answers, factor trace, routing boundary, and prototype disclaimer.
+- [x] Connect PDF export to completed screening results and screening-history details.
+- [x] Validate consent, language toggling, accessible dialogs, and PDF generation before delivery.
