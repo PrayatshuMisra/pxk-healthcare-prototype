@@ -89,3 +89,6 @@ The PxK mark is an interlocking **P–K route symbol**: two softened geometric s
 
 - Every dashboard and ledger surface uses visible **field-sheet** cues: clipped corners, route-record stamps, and a turmeric route bar. Turmeric is reserved for stage movement, next steps, and route numerals.
 - Internal pages repeat concise Kannada-ready service annotations to retain PxK’s Karnataka care-navigation context without adding decorative regional motifs.
+
+- Major route, ledger, and model surfaces are explicitly connected to a downstream decision area with a thin route line and a concise record annotation. The pathway is structural, not merely a status strip.
+- The PxK mark’s language is echoed through compact waypoint dots, connector strokes, and route-record metadata. These cues strengthen authorship while keeping the product calm and practical.
