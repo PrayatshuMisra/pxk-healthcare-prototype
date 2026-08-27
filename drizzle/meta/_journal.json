@@ -8,6 +8,20 @@
       "when": 1787871177618,
       "tag": "0000_empty_mach_iv",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1787873140101,
+      "tag": "0001_nosy_xavin",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1787873337424,
+      "tag": "0002_bored_human_fly",
+      "breakpoints": true
     }
   ]
 }

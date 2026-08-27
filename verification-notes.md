@@ -15,3 +15,15 @@ The consent-gated natural-language intake enables free-text entry only after the
 The final automated suite passed eight tests covering authentication logout, deterministic NLP fallback, structured intake normalisation, account-scoped draft procedures, the three 15-question route definitions, and all referenced tooltip definitions. TypeScript validation and the production build passed.
 
 English and Kannada-ready navigation, intake, screening, patient, and analytics content are implemented. Tulu and Konkani routes explicitly retain English-source clinical content until qualified language and clinical review approves translations; this avoids presenting unverified medical phrasing as authoritative.
+
+## Voice, Booking, and Provider Review — 27 August 2026
+
+The consented voice path was rechecked by the user after repair. Where the remote transcription service is unavailable, the interface falls back to browser speech recognition and shows the recognised words before the user proceeds. Spoken answers are matched only to visible choices, confirmed on screen, and then advance through the questionnaire.
+
+The appointment confirmation issue was traced to a 20-item contract limit that was smaller than the complete 15-question complaint record and route-factor trace. The contract now accepts up to 40 concise ledger entries. A real appointment confirmation was subsequently verified in the active preview.
+
+The authorised provider record was redesigned into a fixed review sheet. Patient and appointment context remains visible above three sections—Overview, Complaint list, and Route factors—while long content scrolls inside the sheet. The user confirmed the revised provider interaction works without repeated maximise/minimise actions. Automated tests now cover non-provider rejection of the protected appointment-review procedure; the complete automated suite contains fifteen tests, and TypeScript validation and the production build pass.
+
+The post-redesign provider route was also reviewed at a 390px mobile viewport. The appointment entry, protected-provider boundary, route rail, metrics, and review entry remain readable without horizontal overflow. The expanded record uses an internal section layout for the longer complaint and factor lists so its outer presentation remains stable on narrow screens.
+
+The user manually confirmed the final mobile expanded-record check: the Overview, Complaint list, and Route factors tabs were reachable, and the longer record content scrolled within the contained review sheet without requiring page or dialog resizing.

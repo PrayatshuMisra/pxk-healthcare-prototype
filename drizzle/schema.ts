@@ -46,3 +46,32 @@ export const screeningRecords = mysqlTable("screeningRecords", {
 
 export type ScreeningRecordRow = typeof screeningRecords.$inferSelect;
 export type InsertScreeningRecord = typeof screeningRecords.$inferInsert;
+
+/** Minimal patient-entered profile used only for consented appointment coordination in this prototype. */
+export const patientProfiles = mysqlTable("patientProfiles", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  displayName: varchar("displayName", { length: 100 }).notNull(),
+  ageYears: int("ageYears").notNull(),
+  gender: varchar("gender", { length: 32 }).notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => [index("patientProfiles_user_idx").on(table.userId)]);
+
+/** User-owned appointment requests. Complaint context comes from the consented screening record, not a copied medical history. */
+export const appointments = mysqlTable("appointments", {
+  id: int("id").autoincrement().primaryKey(),
+  appointmentRef: varchar("appointmentRef", { length: 32 }).notNull().unique(),
+  userId: int("userId").notNull(),
+  doctorId: varchar("doctorId", { length: 64 }).notNull(),
+  scheduledAt: timestamp("scheduledAt").notNull(),
+  status: mysqlEnum("status", ["confirmed", "cancelled", "completed"]).notNull().default("confirmed"),
+  screeningRecordId: varchar("screeningRecordId", { length: 36 }),
+  patientNote: text("patientNote"),
+  complaintLedgerJson: text("complaintLedgerJson").notNull(),
+  consentVersion: varchar("consentVersion", { length: 24 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => [index("appointments_user_status_idx").on(table.userId, table.status), index("appointments_doctor_slot_idx").on(table.doctorId, table.scheduledAt)]);
+
+export type PatientProfileRow = typeof patientProfiles.$inferSelect;
+export type AppointmentRow = typeof appointments.$inferSelect;

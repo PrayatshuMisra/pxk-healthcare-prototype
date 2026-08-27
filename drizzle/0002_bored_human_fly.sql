@@ -1,0 +1,1 @@
+ALTER TABLE `appointments` ADD `complaintLedgerJson` text NOT NULL;

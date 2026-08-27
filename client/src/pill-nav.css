@@ -1,0 +1,19 @@
+/* Community Wayfinding: a roomier typography and pill-navigation layer improves wayfinding without sacrificing the field-sheet language. */
+body { font-family:"Source Sans 3","Noto Sans Kannada","Noto Sans Devanagari",sans-serif !important; font-size:17px; letter-spacing:0 !important; }
+.display-title,.hero-title { font-family:"Manrope","Noto Sans Kannada","Noto Sans Devanagari",sans-serif !important; letter-spacing:-.042em !important; line-height:1.08 !important; }
+.font-kannada { font-family:"Noto Sans Kannada","Manrope",sans-serif !important; letter-spacing:0 !important; }
+.site-header--pill { position:sticky; top:0; z-index:50; background:rgba(250,249,244,.92); }
+.pill-nav-wrap { display:flex; align-items:center; justify-content:space-between; gap:1rem; min-height:5.35rem; }
+.pill-nav { position:relative; display:flex; align-items:center; gap:.55rem; min-width:0; }
+.pill-nav-logo { display:flex; align-items:center; min-width:max-content; padding:.25rem .5rem .25rem 0; }
+.pill-nav-rail { display:flex; align-items:center; gap:.14rem; border:1px solid #C9DDD1; border-radius:999px; background:#EAF3EC; padding:.22rem; }
+.pill-nav-link { position:relative; overflow:hidden; border-radius:999px; padding:.56rem .82rem; color:#385C55; font-family:"Manrope",sans-serif; font-size:.69rem; font-weight:800; line-height:1; text-decoration:none; transition:color .18s var(--ease-out),background .18s var(--ease-out),transform .18s var(--ease-out); }
+.pill-nav-link::before { position:absolute; inset:0; z-index:0; border-radius:inherit; background:#0E5C5A; content:""; transform:translateY(105%); transition:transform .2s var(--ease-out); }
+.pill-nav-link span { position:relative; z-index:1; }.pill-nav-link:hover,.pill-nav-link--active { color:#fff; }.pill-nav-link:hover::before,.pill-nav-link--active::before { transform:translateY(0); }.pill-nav-link:active { transform:scale(.97); }
+.pill-nav-menu { display:none; width:2.5rem; height:2.5rem; place-items:center; border:1px solid #BFD5C8; border-radius:50%; background:#F3F8F3; color:#0E5C5A; }.pill-nav-menu svg { width:1.05rem; }
+.pill-nav-mobile { position:absolute; top:3.4rem; left:0; display:grid; width:min(19rem,calc(100vw - 2rem)); gap:.25rem; border:1px solid #BCD3C6; background:#F8F7F2; padding:.5rem; box-shadow:0 14px 32px rgba(23,59,57,.12); }.pill-nav-mobile a { padding:.7rem .85rem; border-radius:.5rem; color:#173B39; font-size:.78rem; font-weight:800; text-decoration:none; }.pill-nav-mobile a.active,.pill-nav-mobile a:hover { background:#E6F1E8; color:#0E5C5A; }
+.header-route-actions { display:flex; align-items:center; gap:.65rem; }.language-select--pill { min-width:8.5rem; }.language-select--pill select { font-size:.7rem; }.header-route-actions .btn { white-space:nowrap; }
+.hero-section { isolation:isolate; }.hero-section::before { position:absolute; inset:3.5rem 4% auto auto; z-index:-1; width:32rem; height:18rem; border:1px solid rgba(14,92,90,.11); border-radius:46% 54% 66% 34% / 40% 38% 62% 60%; background:rgba(230,241,232,.58); content:""; transform:rotate(-7deg); }.hero-section::after { border-width:2px; }
+.dashboard-page,.model-page { padding-bottom:4rem; }.dashboard-page p,.model-page p { line-height:1.65; }.analytics-card,.doctor-card,.health-profile,.symptom-card { box-shadow:0 11px 26px rgba(23,59,57,.045); }
+@media (max-width:1100px) { .pill-nav-rail { display:none; }.pill-nav-menu { display:grid; }.pill-nav { order:2; }.header-route-actions { margin-left:auto; }.pill-nav-wrap { min-height:4.7rem; } }
+@media (max-width:600px) { body { font-size:16px; }.pill-nav-wrap { gap:.45rem; }.language-select--pill { min-width:0; width:2.45rem; overflow:hidden; }.language-select--pill select { width:0; padding:0; border:0; }.header-route-actions .btn { display:none; }.pill-nav-logo .brand-subtitle { display:none; }.hero-section::before { width:15rem; height:11rem; right:-3rem; top:3rem; } }

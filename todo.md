@@ -53,3 +53,48 @@
 
 - [x] Thread the locale through the model, provider, how-it-works, and about routes and add a page-level English-source boundary where reviewed translation is not available.
 - [x] Record the signed-in save, resume, discard, NLP intake, and tooltip verification evidence in the project documentation.
+
+## Voice, Appointment, and Provider Workflow Upgrade
+
+- [x] Add consent-aware audio recording and server-side speech-to-text transcription for the complaint input.
+- [x] Add voice-assisted selection of supported screening options, with on-screen confirmation before advancing.
+- [x] Extend the database with patient profile and user-owned appointment records while minimising stored health information.
+- [x] Add profile capture, clinician selection, availability choices, appointment booking, and a clear confirmation state.
+- [x] Expand the fictional clinician directory without fabricated ratings, reviews, or testimonials.
+- [x] Add a protected provider-facing appointment panel with the consented patient profile, complaint summary, screening factors, and appointment status.
+- [x] Replace the header with a responsive pill-navigation implementation adapted to the existing PxK route system.
+- [x] Improve global typography, spacing, information density, and background treatment for a calmer, more legible workflow.
+- [x] Validate speech capture, transcription, voice actions, booking, provider privacy, navigation, mobile layouts, and production build.
+
+## Clinician Review Completion Checks
+
+- [x] Store clinician-readable screening questions and selected answers in the appointment ledger rather than internal answer keys.
+- [x] Carry the Route Engine’s factor trace and non-diagnostic route rationale into the provider appointment record.
+- [x] Add provider-access control test coverage and document the full voice-to-booking-to-provider review verification path.
+
+## Speech-to-Text Repair
+
+- [x] Trace and repair the reported microphone capture, audio upload, or server transcription failure.
+- [x] Add a clear, accessible voice-input fallback and error state that preserves typed intake.
+- [x] Verify a real in-browser transcription with the user before final delivery.
+
+## Appointment Confirmation Repair
+
+- [x] Trace and repair the reported appointment booking failure from patient form submission through the protected server procedure and database record creation.
+- [x] Replace the generic booking error with actionable, privacy-safe feedback where possible.
+- [x] Verify a real appointment confirmation and provider-panel record with the user before final delivery.
+
+## Provider Record Layout Correction
+
+- [x] Redesign the provider appointment detail so the key patient and appointment summary stays visible while the long complaint ledger is scanned.
+- [x] Contain the ledger with an accessible internal scroll area and responsive grouping rather than requiring disruptive dialog resizing.
+- [x] Verify the record detail at desktop and mobile sizes before final delivery.
+
+## Final Provider Detail Evidence
+
+- [x] Reconfirm the documented voice-to-booking-to-provider review verification record is present in the project notes.
+- [x] Capture and record a post-redesign mobile check of the provider appointment tabs and internal scroll area.
+
+## Mobile Expanded Record Check
+
+- [x] Open a provider appointment at the mobile breakpoint and confirm the Overview, Complaint list, and Route factors tabs plus internal scrolling remain usable.

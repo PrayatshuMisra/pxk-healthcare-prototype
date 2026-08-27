@@ -1,0 +1,8 @@
+/** Community Wayfinding: user appointment booking and provider review are separate protected contracts with account and role boundaries. */
+import { nanoid } from "nanoid";
+import { z } from "zod";
+import { createAppointment, listOwnAppointments, listProviderAppointments } from "../appointmentDb";
+import { adminProcedure, protectedProcedure, router } from "../_core/trpc";
+const doctorIds = ["ananya-rao","vivek-shetty","meera-nair","arjun-bhat","nisha-kulal","sanjay-pai","divya-mendon","rohan-prabhu","farah-khan","kiran-hegde","sneha-dsouza","manoj-kulkarni"] as const;
+const profile = z.object({ displayName: z.string().trim().min(2).max(100), ageYears: z.number().int().min(0).max(120), gender: z.enum(["woman", "man", "nonbinary", "prefer_not_to_say"]) });
+export const appointmentRouter = router({ book: protectedProcedure.input(z.object({ doctorId: z.enum(doctorIds), scheduledAt: z.string().datetime(), screeningRecordId: z.string().max(36).optional(), patientNote: z.string().trim().max(800).optional(), complaintLedger: z.array(z.object({ question: z.string().max(300), answer: z.string().max(300) })).min(1).max(40), consentAcknowledged: z.literal(true), profile })).mutation(async ({ ctx, input }) => createAppointment({ userId: ctx.user.id, appointmentRef: `PXK-${nanoid(8).toUpperCase()}`, doctorId: input.doctorId, scheduledAt: new Date(input.scheduledAt), screeningRecordId: input.screeningRecordId, patientNote: input.patientNote, complaintLedgerJson: JSON.stringify(input.complaintLedger), consentVersion: "appointment-consent-v1", profile: input.profile })), listMine: protectedProcedure.query(({ ctx }) => listOwnAppointments(ctx.user.id)), listForProvider: adminProcedure.query(() => listProviderAppointments()) });

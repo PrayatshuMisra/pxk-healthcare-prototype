@@ -1,0 +1,5 @@
+/** Community Wayfinding: spoken choices are matched only against visible options and never interpreted as medical conclusions. */
+export type VoiceOption = { value: string; label: string };
+const normalise = (value: string) => value.toLowerCase().replace(/[.,!?;:()[\]{}'"`]/g, " ").replace(/\s+/g, " ").trim();
+const aliases: Record<string, string[]> = { yes: ["yeah", "yep", "haudu"], no: ["nope", "illa"], "not sure": ["unsure", "i dont know", "not certain"] };
+export function matchSpokenOption(transcript: string, options: VoiceOption[]) { const heard = normalise(transcript); const words = heard.split(" "); const exact = options.find((option) => [normalise(option.label), normalise(option.value)].includes(heard)); if (exact) return exact.value; return options.find((option) => { const values = [normalise(option.label), normalise(option.value), ...(aliases[normalise(option.value)] || [])]; return values.some((value) => { if (!value) return false; if (value.includes(" ")) return heard.includes(value) || value.includes(heard); return words.includes(value); }); })?.value; }
