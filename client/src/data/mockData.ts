@@ -1,63 +1,79 @@
 /**
- * Community Wayfinding design system: all fictional PxK prototype data is
- * deliberately separated from view components and never represents real care.
+ * Community Wayfinding: fictional local data, bounded screening language, and
+ * browser-only history. PxK demonstrates routing; it never provides diagnosis.
  */
 export type Language = "en" | "kn" | "tulu";
+export type ScenarioId = "respiratory" | "digestive" | "dental";
+export type QuestionGroup = "Concern & symptoms" | "Pattern & context" | "History & preference";
 
-export type Doctor = {
-  id: string;
-  name: string;
-  initials: string;
-  specialty: string;
-  experience: number;
-  fee: number;
-  distance: number;
-  availability: string;
-  match: string;
-  clinic: string;
-  languages: string[];
-  tone: "teal" | "eucalyptus" | "turmeric" | "clay";
+export type ScreeningQuestionData = { id: string; question: string; options: string[]; group: QuestionGroup };
+export type Scenario = { id: ScenarioId; label: string; shortLabel: string; description: string; route: string; specialty: string; icon: "lungs" | "digestive" | "dental"; questions: ScreeningQuestionData[] };
+export type ScreeningSession = { symptom: string; duration: string; condition: string; completedAt: string; chiefComplaint: string; relevantHistory: string; potentialSpecialty: string; nextStep: string; status?: string; scenario?: string };
+export type ScreeningRecord = ScreeningSession & { id: string; scenarioId: ScenarioId; scenario: string; answers: Record<string, string>; startedAt: string; status: "Routine clinical follow-up" | "Priority clinical review"; cue: string; carePreference: string };
+export type Doctor = { id: string; name: string; initials: string; specialty: string; experience: number; fee: number; distance: number; availability: string; match: string; clinic: string; languages: string[]; tone: "teal" | "eucalyptus" | "turmeric" | "clay" };
+
+export const ASSETS = { logo: "/manus-storage/pxk-route-mark_e4cd9c8c.png", heroPhone: "/manus-storage/pxk-hero-phone_0446e360.png", profileSheet: "/manus-storage/pxk-profile-sheet_2d4eecf8.png", doctorMatch: "/manus-storage/pxk-doctor-match_49f8757f.png", monitoring: "/manus-storage/pxk-monitoring-route_950aeb70.png" };
+export const PATHWAY_STAGES = [{ number: "01", title: "Concern", copy: "Tell us what you’re experiencing.", icon: "MessageCircle" }, { number: "02", title: "Screening", copy: "Answer simple questions in your language.", icon: "ClipboardList" }, { number: "03", title: "Specialist", copy: "Find the right specialty and nearby doctor.", icon: "MapPin" }, { number: "04", title: "Monitoring", copy: "Keep track of changes over time.", icon: "ChartNoAxesCombined" }];
+
+export const SCENARIOS: Record<ScenarioId, Scenario> = {
+  respiratory: { id: "respiratory", label: "Respiratory symptoms", shortLabel: "Breathing & cough", description: "Cough, breathlessness, wheezing, chest tightness, and related history.", route: "Respiratory care route", specialty: "Pulmonology", icon: "lungs", questions: [
+    { id: "main", group: "Concern & symptoms", question: "What is your main problem?", options: ["Cough", "Breathlessness", "Wheezing", "Chest tightness"] },
+    { id: "fever", group: "Concern & symptoms", question: "Do you have fever?", options: ["Yes", "No"] },
+    { id: "coughType", group: "Concern & symptoms", question: "Is your cough dry or with mucus?", options: ["Dry", "Mucus", "Blood", "No cough"] },
+    { id: "mucus", group: "Concern & symptoms", question: "What is the mucus colour?", options: ["Clear", "White", "Yellow/green", "Blood-stained"] },
+    { id: "breathing", group: "Pattern & context", question: "When is breathing difficulty worse?", options: ["Exercise", "Night", "At rest", "All the time"] },
+    { id: "trigger", group: "Pattern & context", question: "What triggers your symptoms?", options: ["Dust/smoke", "Cold air", "Exercise", "Allergens", "Nothing"] },
+    { id: "wheezing", group: "Pattern & context", question: "Do you hear a whistling sound while breathing?", options: ["Yes", "No"] },
+    { id: "duration", group: "Pattern & context", question: "How long have you had the symptoms?", options: ["Less than 1 day", "1–7 days", "1–4 weeks", "More than 1 month"] },
+    { id: "other", group: "History & preference", question: "Do you have any of these?", options: ["Chest pain", "Night sweats", "Weight loss", "None"] },
+    { id: "episodes", group: "History & preference", question: "Have you had similar episodes before?", options: ["Yes, frequently", "Sometimes", "Never"] },
+    { id: "lungHistory", group: "History & preference", question: "Do you have asthma or another lung disease?", options: ["Asthma", "COPD", "Tuberculosis", "None", "Not sure"] },
+    { id: "tobacco", group: "History & preference", question: "Do you smoke or use tobacco?", options: ["Yes", "No", "Previously"] },
+  ] },
+  digestive: { id: "digestive", label: "Abdominal & digestive symptoms", shortLabel: "Stomach & digestion", description: "Abdominal discomfort, eating patterns, bowel changes, and relevant history.", route: "Digestive care route", specialty: "Gastroenterology", icon: "digestive", questions: [
+    { id: "main", group: "Concern & symptoms", question: "What is your main problem?", options: ["Stomach/abdominal pain", "Acidity or heartburn", "Vomiting", "Loose motions/diarrhoea", "Constipation", "Loss of appetite", "Other"] },
+    { id: "location", group: "Concern & symptoms", question: "Where exactly do you feel pain or discomfort?", options: ["Upper abdomen", "Lower abdomen", "Right side", "Left side", "Around the navel", "All over the abdomen", "I do not have pain"] },
+    { id: "feeling", group: "Concern & symptoms", question: "What does the pain or discomfort feel like?", options: ["Burning", "Cramping", "Sharp", "Dull/aching"] },
+    { id: "severity", group: "Concern & symptoms", question: "How severe is your pain or discomfort?", options: ["Mild — does not affect daily activities", "Moderate — affects some activities", "Severe — difficult to perform normal activities", "Very severe — unbearable"] },
+    { id: "food", group: "Pattern & context", question: "Does eating or movement affect your symptoms?", options: ["Before food / when I have not eaten", "After eating", "During movement", "No relation to food", "I am not sure"] },
+    { id: "associated", group: "Pattern & context", question: "Which symptoms do you have along with your main problem?", options: ["Nausea", "Vomiting", "Bloating/gas", "Acidity/heartburn", "Diarrhoea", "Constipation", "Loss of appetite", "None of these"] },
+    { id: "blood", group: "Pattern & context", question: "Have you noticed any blood or unusual stool change?", options: ["Blood in vomit", "Blood in stool", "Black/tarry stool", "No blood noticed", "Not sure"] },
+    { id: "fever", group: "Pattern & context", question: "Do you have fever?", options: ["No", "Mild fever", "High fever", "I am not sure"] },
+    { id: "fluid", group: "History & preference", question: "Have you had repeated vomiting or difficulty keeping food or water down?", options: ["No", "Once or twice", "Several times", "I cannot keep food or water down"] },
+    { id: "duration", group: "History & preference", question: "How long have you had this problem?", options: ["Less than 24 hours", "1–3 days", "4–7 days", "1–4 weeks", "More than 1 month", "More than 6 months"] },
+    { id: "history", group: "History & preference", question: "Have you had similar symptoms or relevant medical history?", options: ["Never", "Occasionally", "Frequently", "Diabetes", "Liver/gallbladder disease", "Stomach/intestine disease", "Previous abdominal surgery", "Other"] },
+    { id: "care", group: "History & preference", question: "What type of medical care would you prefer?", options: ["In-person consultation", "Teleconsultation", "Either is acceptable", "I need urgent medical attention"] },
+  ] },
+  dental: { id: "dental", label: "Dental symptoms", shortLabel: "Teeth & gums", description: "Tooth pain, sensitivity, swelling, gums, and previous dental treatment.", route: "Dental care route", specialty: "General Dentistry", icon: "dental", questions: [
+    { id: "main", group: "Concern & symptoms", question: "What is your main concern?", options: ["Pain", "Sensitivity", "Swelling", "Bleeding", "Ulcer", "Broken/loose tooth"] },
+    { id: "jaw", group: "Concern & symptoms", question: "Which jaw?", options: ["Upper", "Lower", "Both"] },
+    { id: "region", group: "Concern & symptoms", question: "Which region?", options: ["Front", "Back", "Both"] },
+    { id: "side", group: "Concern & symptoms", question: "Which side?", options: ["Right", "Left", "Both"] },
+    { id: "teeth", group: "Pattern & context", question: "One tooth or multiple teeth?", options: ["One tooth", "Multiple teeth", "Not sure"] },
+    { id: "trigger", group: "Pattern & context", question: "What triggers the problem?", options: ["Hot", "Cold", "Sweet", "Biting/chewing", "Nothing"] },
+    { id: "duration", group: "Pattern & context", question: "How long have you had the problem?", options: ["Today", "1–7 days", "1–4 weeks", "More than 1 month"] },
+    { id: "swelling", group: "Pattern & context", question: "Is there swelling?", options: ["Yes", "No"] },
+    { id: "pus", group: "History & preference", question: "Any pus or bad taste?", options: ["Yes", "No"] },
+    { id: "bleeding", group: "History & preference", question: "Are your gums bleeding?", options: ["Yes", "No"] },
+    { id: "loose", group: "History & preference", question: "Is the tooth loose?", options: ["Yes", "No"] },
+    { id: "treatment", group: "History & preference", question: "Have you had treatment before?", options: ["Filling", "Root canal", "Crown", "Extraction", "No treatment", "Not sure"] },
+  ] },
 };
-
-export type ScreeningSession = {
-  symptom: string;
-  duration: string;
-  condition: string;
-  completedAt: string;
-  chiefComplaint: string;
-  relevantHistory: string;
-  potentialSpecialty: string;
-  nextStep: string;
-};
-
-export const ASSETS = {
-  logo: "/manus-storage/pxk-route-mark_e4cd9c8c.png",
-  heroPhone: "/manus-storage/pxk-hero-phone_0446e360.png",
-  profileSheet: "/manus-storage/pxk-profile-sheet_2d4eecf8.png",
-  doctorMatch: "/manus-storage/pxk-doctor-match_49f8757f.png",
-  monitoring: "/manus-storage/pxk-monitoring-route_950aeb70.png",
-};
-
-export const PATHWAY_STAGES = [
-  { number: "01", title: "Concern", copy: "Tell us what you’re experiencing.", icon: "MessageCircle" },
-  { number: "02", title: "Screening", copy: "Answer simple questions in your language.", icon: "ClipboardList" },
-  { number: "03", title: "Specialist", copy: "Find the right specialty and nearby doctor.", icon: "MapPin" },
-  { number: "04", title: "Monitoring", copy: "Keep track of changes over time.", icon: "ChartNoAxesCombined" },
-];
 
 export const DOCTORS: Doctor[] = [
   { id: "ananya-rao", name: "Dr. Ananya Rao", initials: "AR", specialty: "Pulmonologist", experience: 12, fee: 500, distance: 4.2, availability: "Today · 6:30 PM", match: "Relevant experience for respiratory symptom follow-up.", clinic: "Mangaluru Respiratory Centre", languages: ["English", "ಕನ್ನಡ", "Tulu"], tone: "teal" },
   { id: "vivek-shetty", name: "Dr. Vivek Shetty", initials: "VS", specialty: "General Physician", experience: 15, fee: 350, distance: 2.1, availability: "Tomorrow · 9:00 AM", match: "A practical first point of consultation for a broad review.", clinic: "Coastal Family Practice", languages: ["English", "ಕನ್ನಡ", "Tulu"], tone: "eucalyptus" },
-  { id: "meera-nair", name: "Dr. Meera Nair", initials: "MN", specialty: "Cardiologist", experience: 10, fee: 650, distance: 6.8, availability: "Thu · 4:15 PM", match: "Suitable if a clinician advises a cardiac assessment.", clinic: "Kankanady Heart Clinic", languages: ["English", "ಕನ್ನಡ"], tone: "turmeric" },
-  { id: "arjun-bhat", name: "Dr. Arjun Bhat", initials: "AB", specialty: "Endocrinologist", experience: 9, fee: 550, distance: 5.6, availability: "Fri · 11:30 AM", match: "Relevant for follow-up when existing metabolic conditions are reported.", clinic: "Kadri Health Collective", languages: ["English", "ಕನ್ನಡ"], tone: "clay" },
+  { id: "meera-nair", name: "Dr. Meera Nair", initials: "MN", specialty: "Gastroenterologist", experience: 10, fee: 650, distance: 6.8, availability: "Thu · 4:15 PM", match: "Relevant experience for digestive symptom follow-up.", clinic: "Kankanady Digestive Care", languages: ["English", "ಕನ್ನಡ"], tone: "turmeric" },
+  { id: "arjun-bhat", name: "Dr. Arjun Bhat", initials: "AB", specialty: "General Dentist", experience: 9, fee: 400, distance: 3.1, availability: "Today · 5:00 PM", match: "A practical first dental consultation for a reported concern.", clinic: "Kadri Dental Collective", languages: ["English", "ಕನ್ನಡ"], tone: "clay" },
+  { id: "nisha-kulal", name: "Dr. Nisha Kulal", initials: "NK", specialty: "Endodontist", experience: 8, fee: 550, distance: 5.6, availability: "Fri · 11:30 AM", match: "Relevant experience for tooth pain and prior treatment follow-up.", clinic: "Hampankatta Dental Care", languages: ["English", "ಕನ್ನಡ", "Tulu"], tone: "teal" },
+  { id: "sanjay-pai", name: "Dr. Sanjay Pai", initials: "SP", specialty: "Periodontist", experience: 11, fee: 500, distance: 7.0, availability: "Sat · 10:15 AM", match: "Relevant experience for gum-related concerns and review.", clinic: "Coastal Gum & Dental Clinic", languages: ["English", "ಕನ್ನಡ"], tone: "eucalyptus" },
 ];
 
-export const DEFAULT_SESSION: ScreeningSession = { symptom: "Persistent cough and breathlessness", duration: "More than a month", condition: "None reported", completedAt: "Aug 2026", chiefComplaint: "Persistent cough and breathlessness", relevantHistory: "Symptoms reported for more than 3 weeks.", potentialSpecialty: "Pulmonology", nextStep: "A respiratory specialist may be an appropriate next point of clinical consultation." };
-
-export const SCREENING_QUESTIONS = [
-  { id: "symptom", question: "What are you experiencing?", kannada: "ನೀವು ಏನು ಅನುಭವಿಸುತ್ತಿದ್ದೀರಿ?", options: ["Chest discomfort", "Breathlessness", "Persistent cough", "Fatigue", "Other"] },
-  { id: "duration", question: "How long have you experienced this?", kannada: "ನೀವು ಇದನ್ನು ಎಷ್ಟು ಸಮಯದಿಂದ ಅನುಭವಿಸುತ್ತಿದ್ದೀರಿ?", options: ["Less than a week", "1–4 weeks", "More than a month"] },
-  { id: "condition", question: "Do you have any existing health conditions?", kannada: "ನಿಮಗೆ ಈಗಾಗಲೇ ಯಾವುದೇ ಆರೋಗ್ಯ ಸ್ಥಿತಿಗಳಿವೆಯೇ?", options: ["Diabetes", "Hypertension", "None", "Other"] },
+const seededAnswers: Record<string, string> = { main: "Cough", fever: "No", coughType: "Mucus", mucus: "White", breathing: "Exercise", trigger: "Dust/smoke", wheezing: "No", duration: "1–4 weeks", other: "None", episodes: "Sometimes", lungHistory: "None", tobacco: "No" };
+export const SEED_HISTORY: ScreeningRecord[] = [
+  { id: "PXK-DEMO-0826", scenarioId: "respiratory", scenario: "Respiratory symptoms", answers: seededAnswers, startedAt: "18 Aug 2026", completedAt: "18 Aug 2026", symptom: "Cough", duration: "1–4 weeks", condition: "No prior lung condition reported", chiefComplaint: "Cough", relevantHistory: "Symptoms reported for 1–4 weeks. No prior lung condition selected.", potentialSpecialty: "Pulmonology", nextStep: "A respiratory specialist may be an appropriate next point of clinical consultation.", status: "Routine clinical follow-up", cue: "Patient-reported respiratory symptoms over several weeks.", carePreference: "Either is acceptable" },
+  { id: "PXK-DEMO-0719", scenarioId: "digestive", scenario: "Abdominal & digestive symptoms", answers: { main: "Acidity or heartburn", location: "Upper abdomen", feeling: "Burning", severity: "Mild — does not affect daily activities", food: "After eating", associated: "Bloating/gas", blood: "No blood noticed", fever: "No", fluid: "No", duration: "1–4 weeks", history: "Occasionally", care: "In-person consultation" }, startedAt: "19 Jul 2026", completedAt: "19 Jul 2026", symptom: "Acidity or heartburn", duration: "1–4 weeks", condition: "Occasional similar symptoms", chiefComplaint: "Acidity or heartburn", relevantHistory: "Upper abdomen discomfort reported for 1–4 weeks.", potentialSpecialty: "Gastroenterology", nextStep: "A digestive-health specialist may be an appropriate next point of clinical consultation.", status: "Routine clinical follow-up", cue: "Ongoing digestive concern reported through a screening check-in.", carePreference: "In-person consultation" },
+  { id: "PXK-DEMO-0611", scenarioId: "dental", scenario: "Dental symptoms", answers: { main: "Sensitivity", jaw: "Upper", region: "Back", side: "Left", teeth: "One tooth", trigger: "Cold", duration: "1–7 days", swelling: "No", pus: "No", bleeding: "No", loose: "No", treatment: "No treatment" }, startedAt: "11 Jun 2026", completedAt: "11 Jun 2026", symptom: "Sensitivity", duration: "1–7 days", condition: "No prior treatment reported", chiefComplaint: "Dental sensitivity", relevantHistory: "A single upper back tooth concern was reported.", potentialSpecialty: "General Dentistry", nextStep: "A dentist may be an appropriate next point of clinical consultation.", status: "Routine clinical follow-up", cue: "Patient-reported dental sensitivity.", carePreference: "In-person consultation" },
 ];
 
 export const DOCTOR_PATIENTS = [
@@ -67,23 +83,15 @@ export const DOCTOR_PATIENTS = [
   { id: "PXK-1404", complaint: "Persistent skin irritation", date: "Yesterday", profile: "Dermatology route suggested", status: "Reviewed", tone: "reviewed" },
 ];
 
-export const LANGUAGE_COPY: Record<Language, { label: string; short: string; hero: string; support: string; start: string }> = {
-  en: { label: "English", short: "English", hero: "Right patient. Right doctor. Right time.", support: "PxK helps patients turn health concerns into a clear next step — from early screening to the right specialist and continued monitoring.", start: "Start screening" },
-  kn: { label: "ಕನ್ನಡ", short: "ಕನ್ನಡ", hero: "ಸರಿಯಾದ ರೋಗಿ. ಸರಿಯಾದ ವೈದ್ಯರು. ಸರಿಯಾದ ಸಮಯ.", support: "PxK ಆರೋಗ್ಯದ ಕಾಳಜಿಯನ್ನು ಸ್ಪಷ್ಟವಾದ ಮುಂದಿನ ಹಂತವಾಗಿ ರೂಪಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.", start: "ಸ್ಕ್ರೀನಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ" },
-  tulu: { label: "Tulu", short: "Tulu", hero: "Right patient. Right doctor. Right time.", support: "Tulu interface copy is being prepared with verified language review.", start: "Start screening" },
-};
+export const DEFAULT_SESSION: ScreeningSession = SEED_HISTORY[0];
+export const LANGUAGE_COPY: Record<Language, { label: string; short: string; hero: string; support: string; start: string }> = { en: { label: "English", short: "English", hero: "Right patient. Right doctor. Right time.", support: "PxK helps patients turn health concerns into a clear next step — from early screening to the right specialist and continued monitoring.", start: "Start screening" }, kn: { label: "ಕನ್ನಡ", short: "ಕನ್ನಡ", hero: "ಸರಿಯಾದ ರೋಗಿ. ಸರಿಯಾದ ವೈದ್ಯರು. ಸರಿಯಾದ ಸಮಯ.", support: "PxK ಆರೋಗ್ಯದ ಕಾಳಜಿಯನ್ನು ಸ್ಪಷ್ಟವಾದ ಮುಂದಿನ ಹಂತವಾಗಿ ರೂಪಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.", start: "ಸ್ಕ್ರೀನಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ" }, tulu: { label: "Tulu", short: "Tulu", hero: "Right patient. Right doctor. Right time.", support: "Tulu interface copy is being prepared with verified language review.", start: "Start screening" } };
 
-export function makeSession(symptom: string, duration: string, condition: string): ScreeningSession {
-  const pulmonary = symptom === "Persistent cough" || symptom === "Breathlessness";
-  const cardiac = symptom === "Chest discomfort";
-  const specialty = pulmonary ? "Pulmonology" : cardiac ? "Cardiology" : condition === "Diabetes" ? "Endocrinology" : "General Medicine";
-  const complaint = pulmonary && symptom !== "Persistent cough" ? "Persistent cough and breathlessness" : symptom;
-  return { symptom, duration, condition: condition === "None" ? "None reported" : condition, completedAt: "Aug 2026", chiefComplaint: complaint, relevantHistory: `${duration} reported. ${condition === "None" ? "No existing health condition selected." : `${condition} selected in patient-reported history.`}`, potentialSpecialty: specialty, nextStep: `Based on the information provided, a ${specialty === "Pulmonology" ? "respiratory specialist" : specialty === "Cardiology" ? "cardiology specialist" : specialty === "Endocrinology" ? "metabolic health specialist" : "general physician"} may be an appropriate next point of clinical consultation.` };
-}
+function humanDate() { return new Intl.DateTimeFormat("en-IN", { day: "2-digit", month: "short", year: "numeric" }).format(new Date()); }
+function priorityFor(scenario: ScenarioId, answers: Record<string, string>) { const red = scenario === "respiratory" ? answers.coughType === "Blood" || answers.mucus === "Blood-stained" || answers.breathing === "At rest" || answers.breathing === "All the time" || answers.other === "Chest pain" : scenario === "digestive" ? answers.severity === "Very severe — unbearable" || answers.blood !== "No blood noticed" && answers.blood !== "Not sure" || answers.fluid === "I cannot keep food or water down" || answers.care === "I need urgent medical attention" : answers.swelling === "Yes" && answers.pus === "Yes" || answers.loose === "Yes" && answers.bleeding === "Yes" || answers.main === "Ulcer" && answers.duration === "More than 1 month"; return red; }
+export function makeScreeningRecord(scenarioId: ScenarioId, answers: Record<string, string>): ScreeningRecord { const scenario = SCENARIOS[scenarioId]; const priority = priorityFor(scenarioId, answers); const date = humanDate(); const specialty = scenario.specialty; const main = answers.main || "Patient-reported concern"; const history = scenarioId === "respiratory" ? `${answers.duration || "Time frame not recorded"}. ${answers.lungHistory || "No lung history recorded"} selected.` : scenarioId === "digestive" ? `${answers.location || "Location not recorded"}. ${answers.duration || "Time frame not recorded"}.` : `${answers.jaw || "Jaw not recorded"} jaw, ${answers.region || "region not recorded"} region. ${answers.duration || "Time frame not recorded"}.`; const next = priority ? "Some reported responses are marked for priority clinical review in this prototype. A qualified healthcare professional should determine the appropriate assessment and treatment." : scenarioId === "respiratory" ? "A respiratory specialist may be an appropriate next point of clinical consultation." : scenarioId === "digestive" ? "A digestive-health specialist may be an appropriate next point of clinical consultation." : "A dentist may be an appropriate next point of clinical consultation."; return { id: `PXK-${Date.now().toString().slice(-6)}`, scenarioId, scenario: scenario.label, answers, startedAt: date, completedAt: date, symptom: main, duration: answers.duration || "Not recorded", condition: answers.history || answers.lungHistory || answers.treatment || "Not recorded", chiefComplaint: main, relevantHistory: history, potentialSpecialty: specialty, nextStep: next, status: priority ? "Priority clinical review" : "Routine clinical follow-up", cue: priority ? "A reported screening cue needs priority clinical review; this is not a diagnosis." : "A reported pattern has been structured for a clinical conversation.", carePreference: answers.care || "In-person consultation" }; }
 
-export function loadSession(): ScreeningSession {
-  if (typeof window === "undefined") return DEFAULT_SESSION;
-  try { const saved = window.sessionStorage.getItem("pxk-screening-session"); return saved ? { ...DEFAULT_SESSION, ...JSON.parse(saved) } : DEFAULT_SESSION; } catch { return DEFAULT_SESSION; }
-}
-
-export function storeSession(session: ScreeningSession) { if (typeof window !== "undefined") window.sessionStorage.setItem("pxk-screening-session", JSON.stringify(session)); }
+const HISTORY_KEY = "pxk-screening-history";
+export function getScreeningHistory(): ScreeningRecord[] { if (typeof window === "undefined") return SEED_HISTORY; try { const saved = window.localStorage.getItem(HISTORY_KEY); const records = saved ? JSON.parse(saved) : null; return Array.isArray(records) && records.length ? records : SEED_HISTORY; } catch { return SEED_HISTORY; } }
+export function saveScreeningRecord(record: ScreeningRecord) { const next = [record, ...getScreeningHistory()].slice(0, 20); if (typeof window !== "undefined") window.localStorage.setItem(HISTORY_KEY, JSON.stringify(next)); return next; }
+export function resetDemoHistory() { if (typeof window !== "undefined") window.localStorage.removeItem(HISTORY_KEY); }
+export function loadSession(): ScreeningSession { return getScreeningHistory()[0] || DEFAULT_SESSION; }

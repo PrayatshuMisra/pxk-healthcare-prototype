@@ -86,3 +86,6 @@ The PxK mark is an interlocking **P–K route symbol**: two softened geometric s
 - The **PxK Pathway** appears on every major route as a clear organizing device, supplemented by numbered route markers, directional strokes, and field-sheet anchors rather than generic dashboard grids.
 - Karnataka context is communicated through restrained service-design cues: Kannada/Tulu-ready wayfinding labels, route annotations, compact record stamps, and practical field-tool geometry. No decorative regional motifs or stock imagery are used.
 - **PxK** remains the product identity in navigation, primary calls to action, and end-state screens. Team Errorists is a small provenance credit for the SIH 2026 prototype.
+
+- Every dashboard and ledger surface uses visible **field-sheet** cues: clipped corners, route-record stamps, and a turmeric route bar. Turmeric is reserved for stage movement, next steps, and route numerals.
+- Internal pages repeat concise Kannada-ready service annotations to retain PxK’s Karnataka care-navigation context without adding decorative regional motifs.
