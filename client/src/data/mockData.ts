@@ -3,11 +3,11 @@
  * browser-only history. PxK demonstrates routing; it never provides diagnosis.
  */
 import { evaluateRoute, type RouteDecision } from "@/data/routeEngine";
-export type Language = "en" | "kn" | "tulu";
+export type Language = "en" | "kn" | "tulu" | "kok";
 export type ScenarioId = "respiratory" | "digestive" | "dental";
-export type QuestionGroup = "Concern & symptoms" | "Pattern & context" | "History & preference";
+export type QuestionGroup = "Concern & symptoms" | "Pattern & context" | "History & preference" | "Daily impact & care";
 
-export type ScreeningQuestionData = { id: string; question: string; options: string[]; group: QuestionGroup };
+export type ScreeningQuestionData = { id: string; question: string; options: string[]; group: QuestionGroup; helpTerm?: string };
 export type Scenario = { id: ScenarioId; label: string; shortLabel: string; description: string; route: string; specialty: string; icon: "lungs" | "digestive" | "dental"; questions: ScreeningQuestionData[] };
 export type ScreeningSession = { symptom: string; duration: string; condition: string; completedAt: string; chiefComplaint: string; relevantHistory: string; potentialSpecialty: string; nextStep: string; status?: string; scenario?: string };
 export type ScreeningRecord = ScreeningSession & { id: string; scenarioId: ScenarioId; scenario: string; answers: Record<string, string>; startedAt: string; status: "Routine clinical follow-up" | "Priority clinical review"; cue: string; carePreference: string; decisionSupport?: RouteDecision };
@@ -20,16 +20,19 @@ export const SCENARIOS: Record<ScenarioId, Scenario> = {
   respiratory: { id: "respiratory", label: "Respiratory symptoms", shortLabel: "Breathing & cough", description: "Cough, breathlessness, wheezing, chest tightness, and related history.", route: "Respiratory care route", specialty: "Pulmonology", icon: "lungs", questions: [
     { id: "main", group: "Concern & symptoms", question: "What is your main problem?", options: ["Cough", "Breathlessness", "Wheezing", "Chest tightness"] },
     { id: "fever", group: "Concern & symptoms", question: "Do you have fever?", options: ["Yes", "No"] },
-    { id: "coughType", group: "Concern & symptoms", question: "Is your cough dry or with mucus?", options: ["Dry", "Mucus", "Blood", "No cough"] },
-    { id: "mucus", group: "Concern & symptoms", question: "What is the mucus colour?", options: ["Clear", "White", "Yellow/green", "Blood-stained"] },
+    { id: "coughType", group: "Concern & symptoms", question: "Is your cough dry or with mucus?", options: ["Dry", "Mucus", "Blood", "No cough"], helpTerm: "mucus" },
+    { id: "mucus", group: "Concern & symptoms", question: "What is the mucus colour?", options: ["Clear", "White", "Yellow/green", "Blood-stained"], helpTerm: "mucus" },
     { id: "breathing", group: "Pattern & context", question: "When is breathing difficulty worse?", options: ["Exercise", "Night", "At rest", "All the time"] },
     { id: "trigger", group: "Pattern & context", question: "What triggers your symptoms?", options: ["Dust/smoke", "Cold air", "Exercise", "Allergens", "Nothing"] },
     { id: "wheezing", group: "Pattern & context", question: "Do you hear a whistling sound while breathing?", options: ["Yes", "No"] },
     { id: "duration", group: "Pattern & context", question: "How long have you had the symptoms?", options: ["Less than 1 day", "1–7 days", "1–4 weeks", "More than 1 month"] },
     { id: "other", group: "History & preference", question: "Do you have any of these?", options: ["Chest pain", "Night sweats", "Weight loss", "None"] },
     { id: "episodes", group: "History & preference", question: "Have you had similar episodes before?", options: ["Yes, frequently", "Sometimes", "Never"] },
-    { id: "lungHistory", group: "History & preference", question: "Do you have asthma or another lung disease?", options: ["Asthma", "COPD", "Tuberculosis", "None", "Not sure"] },
+    { id: "lungHistory", group: "History & preference", question: "Do you have asthma or another lung disease?", options: ["Asthma", "COPD", "Tuberculosis", "None", "Not sure"], helpTerm: "copd" },
     { id: "tobacco", group: "History & preference", question: "Do you smoke or use tobacco?", options: ["Yes", "No", "Previously"] },
+    { id: "impact", group: "Daily impact & care", question: "How is this concern affecting your usual activities?", options: ["Not affecting them", "A little", "Quite a lot", "Unable to do usual activities"] },
+    { id: "care", group: "Daily impact & care", question: "What type of medical follow-up would you prefer?", options: ["In-person consultation", "Teleconsultation", "Either is acceptable", "Not sure"] },
+    { id: "notes", group: "Daily impact & care", question: "Would you like to add this concern to your saved route record?", options: ["Yes, save this check-in", "No, continue without saving"] },
   ] },
   digestive: { id: "digestive", label: "Abdominal & digestive symptoms", shortLabel: "Stomach & digestion", description: "Abdominal discomfort, eating patterns, bowel changes, and relevant history.", route: "Digestive care route", specialty: "Gastroenterology", icon: "digestive", questions: [
     { id: "main", group: "Concern & symptoms", question: "What is your main problem?", options: ["Stomach/abdominal pain", "Acidity or heartburn", "Vomiting", "Loose motions/diarrhoea", "Constipation", "Loss of appetite", "Other"] },
@@ -37,13 +40,16 @@ export const SCENARIOS: Record<ScenarioId, Scenario> = {
     { id: "feeling", group: "Concern & symptoms", question: "What does the pain or discomfort feel like?", options: ["Burning", "Cramping", "Sharp", "Dull/aching"] },
     { id: "severity", group: "Concern & symptoms", question: "How severe is your pain or discomfort?", options: ["Mild — does not affect daily activities", "Moderate — affects some activities", "Severe — difficult to perform normal activities", "Very severe — unbearable"] },
     { id: "food", group: "Pattern & context", question: "Does eating or movement affect your symptoms?", options: ["Before food / when I have not eaten", "After eating", "During movement", "No relation to food", "I am not sure"] },
-    { id: "associated", group: "Pattern & context", question: "Which symptoms do you have along with your main problem?", options: ["Nausea", "Vomiting", "Bloating/gas", "Acidity/heartburn", "Diarrhoea", "Constipation", "Loss of appetite", "None of these"] },
-    { id: "blood", group: "Pattern & context", question: "Have you noticed any blood or unusual stool change?", options: ["Blood in vomit", "Blood in stool", "Black/tarry stool", "No blood noticed", "Not sure"] },
+    { id: "associated", group: "Pattern & context", question: "Which symptoms do you have along with your main problem?", options: ["Nausea", "Vomiting", "Bloating/gas", "Acidity/heartburn", "Diarrhoea", "Constipation", "Loss of appetite", "None of these"], helpTerm: "bloating" },
+    { id: "blood", group: "Pattern & context", question: "Have you noticed any blood or unusual stool change?", options: ["Blood in vomit", "Blood in stool", "Black/tarry stool", "No blood noticed", "Not sure"], helpTerm: "tarry stool" },
     { id: "fever", group: "Pattern & context", question: "Do you have fever?", options: ["No", "Mild fever", "High fever", "I am not sure"] },
     { id: "fluid", group: "History & preference", question: "Have you had repeated vomiting or difficulty keeping food or water down?", options: ["No", "Once or twice", "Several times", "I cannot keep food or water down"] },
     { id: "duration", group: "History & preference", question: "How long have you had this problem?", options: ["Less than 24 hours", "1–3 days", "4–7 days", "1–4 weeks", "More than 1 month", "More than 6 months"] },
     { id: "history", group: "History & preference", question: "Have you had similar symptoms or relevant medical history?", options: ["Never", "Occasionally", "Frequently", "Diabetes", "Liver/gallbladder disease", "Stomach/intestine disease", "Previous abdominal surgery", "Other"] },
     { id: "care", group: "History & preference", question: "What type of medical care would you prefer?", options: ["In-person consultation", "Teleconsultation", "Either is acceptable", "I need urgent medical attention"] },
+    { id: "impact", group: "Daily impact & care", question: "How is this concern affecting your usual activities?", options: ["Not affecting them", "A little", "Quite a lot", "Unable to do usual activities"] },
+    { id: "diet", group: "Daily impact & care", question: "Have you noticed a food or drink pattern?", options: ["No clear pattern", "Spicy food", "Oily food", "Dairy", "I am not sure"] },
+    { id: "notes", group: "Daily impact & care", question: "Would you like to add this concern to your saved route record?", options: ["Yes, save this check-in", "No, continue without saving"] },
   ] },
   dental: { id: "dental", label: "Dental symptoms", shortLabel: "Teeth & gums", description: "Tooth pain, sensitivity, swelling, gums, and previous dental treatment.", route: "Dental care route", specialty: "General Dentistry", icon: "dental", questions: [
     { id: "main", group: "Concern & symptoms", question: "What is your main concern?", options: ["Pain", "Sensitivity", "Swelling", "Bleeding", "Ulcer", "Broken/loose tooth"] },
@@ -57,7 +63,10 @@ export const SCENARIOS: Record<ScenarioId, Scenario> = {
     { id: "pus", group: "History & preference", question: "Any pus or bad taste?", options: ["Yes", "No"] },
     { id: "bleeding", group: "History & preference", question: "Are your gums bleeding?", options: ["Yes", "No"] },
     { id: "loose", group: "History & preference", question: "Is the tooth loose?", options: ["Yes", "No"] },
-    { id: "treatment", group: "History & preference", question: "Have you had treatment before?", options: ["Filling", "Root canal", "Crown", "Extraction", "No treatment", "Not sure"] },
+    { id: "treatment", group: "History & preference", question: "Have you had treatment before?", options: ["Filling", "Root canal", "Crown", "Extraction", "No treatment", "Not sure"], helpTerm: "root canal" },
+    { id: "impact", group: "Daily impact & care", question: "How is this concern affecting eating, drinking, or sleep?", options: ["Not affecting them", "A little", "Quite a lot", "Unable to do usual activities"] },
+    { id: "care", group: "Daily impact & care", question: "What type of dental follow-up would you prefer?", options: ["In-person consultation", "Teleconsultation", "Either is acceptable", "Not sure"] },
+    { id: "notes", group: "Daily impact & care", question: "Would you like to add this concern to your saved route record?", options: ["Yes, save this check-in", "No, continue without saving"] },
   ] },
 };
 
@@ -85,7 +94,7 @@ export const DOCTOR_PATIENTS = [
 ];
 
 export const DEFAULT_SESSION: ScreeningSession = SEED_HISTORY[0];
-export const LANGUAGE_COPY: Record<Language, { label: string; short: string; hero: string; support: string; start: string }> = { en: { label: "English", short: "English", hero: "Right patient. Right doctor. Right time.", support: "PxK helps patients turn health concerns into a clear next step — from early screening to the right specialist and continued monitoring.", start: "Start screening" }, kn: { label: "ಕನ್ನಡ", short: "ಕನ್ನಡ", hero: "ಸರಿಯಾದ ರೋಗಿ. ಸರಿಯಾದ ವೈದ್ಯರು. ಸರಿಯಾದ ಸಮಯ.", support: "PxK ಆರೋಗ್ಯದ ಕಾಳಜಿಯನ್ನು ಸ್ಪಷ್ಟವಾದ ಮುಂದಿನ ಹಂತವಾಗಿ ರೂಪಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.", start: "ಸ್ಕ್ರೀನಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ" }, tulu: { label: "Tulu", short: "Tulu", hero: "Right patient. Right doctor. Right time.", support: "Tulu interface copy is being prepared with verified language review.", start: "Start screening" } };
+export const LANGUAGE_COPY: Record<Language, { label: string; short: string; hero: string; support: string; start: string }> = { en: { label: "English", short: "English", hero: "Start with your concern. Find the next clear step.", support: "PxK helps patients turn health concerns into a clear next step — from structured screening to an appropriate clinical conversation and continued monitoring.", start: "Start a check-in" }, kn: { label: "ಕನ್ನಡ", short: "ಕನ್ನಡ", hero: "ನಿಮ್ಮ ಕಾಳಜಿಯಿಂದ ಸ್ಪಷ್ಟವಾದ ಮುಂದಿನ ಹಂತಕ್ಕೆ.", support: "PxK ಆರೋಗ್ಯದ ಕಾಳಜಿಯನ್ನು ರಚನಾತ್ಮಕ ಸ್ಕ್ರೀನಿಂಗ್ ಮತ್ತು ಸೂಕ್ತ ಕ್ಲಿನಿಕಲ್ ಸಂಭಾಷಣೆಯ ಮುಂದಿನ ಹಂತವಾಗಿ ರೂಪಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.", start: "ಚೆಕ್-ಇನ್ ಪ್ರಾರಂಭಿಸಿ" }, tulu: { label: "Tulu", short: "Tulu", hero: "Start with your concern. Find the next clear step.", support: "Tulu interface copy is awaiting verified clinical language review. English source copy is shown to avoid inventing medical wording.", start: "Start with English source" }, kok: { label: "कोंकणी", short: "कोंकणी", hero: "Start with your concern. Find the next clear step.", support: "Konkani interface copy is awaiting verified clinical language review. English source copy is shown to avoid inventing medical wording.", start: "Start with English source" } };
 
 function humanDate() { return new Intl.DateTimeFormat("en-IN", { day: "2-digit", month: "short", year: "numeric" }).format(new Date()); }
 function priorityFor(scenario: ScenarioId, answers: Record<string, string>) { const red = scenario === "respiratory" ? answers.coughType === "Blood" || answers.mucus === "Blood-stained" || answers.breathing === "At rest" || answers.breathing === "All the time" || answers.other === "Chest pain" : scenario === "digestive" ? answers.severity === "Very severe — unbearable" || answers.blood !== "No blood noticed" && answers.blood !== "Not sure" || answers.fluid === "I cannot keep food or water down" || answers.care === "I need urgent medical attention" : answers.swelling === "Yes" && answers.pus === "Yes" || answers.loose === "Yes" && answers.bleeding === "Yes" || answers.main === "Ulcer" && answers.duration === "More than 1 month"; return red; }

@@ -7,7 +7,7 @@
 - [x] Add a useful analytics dashboard for screening trends, care routes, scenario distribution, and follow-up status using fictional local data.
 - [x] Improve contrast in the interactive demonstration and enhance page-level hierarchy, field-sheet patterns, and route-map guidance.
 - [x] Validate desktop and mobile interactions, keyboard access, readable text, build integrity, and responsive layouts.
-- [ ] Create the final checkpoint and deliver the upgraded project.
+- [x] Create the final checkpoint and deliver the upgraded project.
 
 ## Potential AI-Assisted Decision Support
 
@@ -31,3 +31,25 @@
 - [x] Add a clinician review export with the screening summary, selected answers, factor trace, routing boundary, and prototype disclaimer.
 - [x] Connect PDF export to completed screening results and screening-history details.
 - [x] Validate consent, language toggling, accessible dialogs, and PDF generation before delivery.
+
+## NLP Intake, i18n, and Workflow Redesign
+
+- [x] Define the non-diagnostic NLP output schema, safety guardrails, route confidence policy, and 15-question route requirements.
+- [x] Upgrade PxK to use server-side language-model calls and authenticated persistent data for saved progress.
+- [x] Add a natural-language concern intake that maps user wording to a transparent screening route without diagnosing a condition.
+- [x] Extend each screening route to a coherent 15-question workflow with medical-term tooltips and clear review states.
+- [x] Implement draft save, resume, update, and discard flows for incomplete screening sessions.
+- [x] Add i18n coverage across the full interface for English, Kannada, Tulu, and Konkani, with clear reviewed-source fallbacks where necessary.
+- [x] Redesign typography, page backgrounds, navigation hierarchy, and care-route guidance so the workflow is easy to understand at a glance.
+- [x] Validate language fallbacks, NLP boundaries, persistence, tooltips, desktop/mobile usability, and production build before delivery.
+
+## Completion Checks for Intelligent Workflow
+
+- [x] Add an explicit discard action for saved screening drafts and verify the account-scoped draft state updates.
+- [x] Thread the selected locale through every PxK route and replace remaining key page-level hardcoded copy with language-aware strings or an explicit source-language boundary.
+- [x] Exercise and document the signed-in save, resume, discard, NLP intake, and tooltip interactions before final delivery.
+
+## Final Locale and Interaction Evidence
+
+- [x] Thread the locale through the model, provider, how-it-works, and about routes and add a page-level English-source boundary where reviewed translation is not available.
+- [x] Record the signed-in save, resume, discard, NLP intake, and tooltip verification evidence in the project documentation.

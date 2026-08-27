@@ -1,0 +1,4 @@
+/** Community Wayfinding: every page receives the active locale and makes any unreviewed source-language boundary explicit. */
+import type { ReactNode } from "react";
+import type { Language } from "@/data/mockData";
+export function RouteLocaleBoundary({ language, children }: { language: Language; children: ReactNode }) { const note = language === "tulu" ? "Tulu clinical copy is shown in English source until qualified language and clinical review is completed." : language === "kok" ? "Konkani clinical copy is shown in English source until qualified language and clinical review is completed." : language === "kn" ? "Kannada is applied to core navigation, intake, screening, patient, and analytics paths; remaining non-clinical prototype detail uses the English source." : null; return <div data-route-locale={language}>{note && <p className="route-locale-boundary" role="note">{note}</p>}{children}</div>; }

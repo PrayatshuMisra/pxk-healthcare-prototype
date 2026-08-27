@@ -1,7 +1,4 @@
-/** Community Wayfinding: language selection is prominent, practical, and never ornamental. */
+/** Community Wayfinding: language selection is prominent, practical, and includes clear source-language fallbacks for unreviewed clinical copy. */
 import type { Language } from "@/data/mockData";
 import { Languages } from "lucide-react";
-
-export function LanguageSelector({ value, onChange, className = "" }: { value: Language; onChange: (value: Language) => void; className?: string }) {
-  return <label className={`language-select ${className}`}><Languages aria-hidden="true" className="h-3.5 w-3.5" /><span className="sr-only">Select interface language</span><select value={value} onChange={(event) => onChange(event.target.value as Language)} aria-label="Select interface language"><option value="en">English</option><option value="kn">ಕನ್ನಡ</option><option value="tulu">Tulu</option></select></label>;
-}
+export function LanguageSelector({ value, onChange, className = "" }: { value: Language; onChange: (value: Language) => void; className?: string }) { return <label className={`language-select ${className}`}><Languages aria-hidden="true" className="h-3.5 w-3.5" /><span className="sr-only">Select interface language</span><select value={value} onChange={(event) => onChange(event.target.value as Language)} aria-label="Select interface language"><option value="en">English</option><option value="kn">ಕನ್ನಡ</option><option value="tulu">Tulu · English source</option><option value="kok">कोंकणी · English source</option></select></label>; }
