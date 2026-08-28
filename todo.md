@@ -98,3 +98,20 @@
 ## Mobile Expanded Record Check
 
 - [x] Open a provider appointment at the mobile breakpoint and confirm the Overview, Complaint list, and Route factors tabs plus internal scrolling remain usable.
+
+## Asset Portability and Account Navigation
+
+- [x] Package all PxK image assets into a downloadable deployment-safe asset bundle and add a source manifest for the project ZIP.
+- [x] Center primary navigation tabs within the desktop header while retaining responsive mobile navigation.
+- [x] Add visible sign-in and sign-out actions with clear authenticated state in the header.
+- [x] Add a profile icon/menu that links an authenticated patient directly to their screening history.
+- [x] Validate asset-pack download access, account actions, centered navigation, history link, and mobile behaviour before delivery.
+
+## Header Interaction Evidence
+
+- [x] Verify signed-in and signed-out header account controls plus the profile-to-history link in the browser.
+- [x] Capture and document the updated navbar and account controls at the mobile breakpoint.
+
+## Final Header Evidence
+
+- [x] Record the completed mobile navbar/account-control check and signed-in/sign-out/profile-to-history confirmation in the verification notes.

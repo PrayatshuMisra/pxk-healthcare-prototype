@@ -27,3 +27,11 @@ The authorised provider record was redesigned into a fixed review sheet. Patient
 The post-redesign provider route was also reviewed at a 390px mobile viewport. The appointment entry, protected-provider boundary, route rail, metrics, and review entry remain readable without horizontal overflow. The expanded record uses an internal section layout for the longer complaint and factor lists so its outer presentation remains stable on narrow screens.
 
 The user manually confirmed the final mobile expanded-record check: the Overview, Complaint list, and Route factors tabs were reachable, and the longer record content scrolled within the contained review sheet without requiring page or dialog resizing.
+
+## Asset Pack and Account Header — 28 August 2026
+
+The project image pack was created as a separate, deployment-safe ZIP and its managed storage path returned a valid redirect. The pack includes the original PxK visual assets and a source manifest that maps each file to its hosted application path.
+
+The centered desktop navigation and responsive mobile header were visually reviewed. The user manually confirmed that the profile control opens Screening history and that the header transitions correctly through sign-out and sign-in states.
+
+At the 390px mobile breakpoint, the header presents compact language, profile/history, sign-out, brand, and menu controls without clipping. The user confirmed the signed-in profile-to-history route and the signed-out-to-signed-in transition in the live preview.
