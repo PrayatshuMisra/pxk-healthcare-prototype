@@ -45,3 +45,11 @@ Before PxK displays a typed complaint field or optional speech button, the user 
 In local demo mode, booking produces a clearly marked, browser-local preview reference only. It does not contact a clinician, create a provider record, or create a patient account. The provider route explicitly keeps appointment records unavailable in local demo mode, preserving the protected-provider boundary.
 
 An automated Chromium walkthrough then confirmed the interactive boundary end to end. It selected **Demo sign in**, confirmed the visible **End demo** state, opened the three-item approval checklist, verified that typed complaint entry appeared only after all items were selected, and then confirmed **End demo** returned the header to **Demo sign in**. The same walkthrough reopened local demo mode, selected a fictional clinician, completed a sample booking, and confirmed the **Booking preview ready · local demo** state together with the explicit statement that nothing was sent to a clinic, provider, or external account.
+
+## Mobile Readability and Illustration Correction — 28 August 2026
+
+The supplied phone illustration was copied into the managed PxK asset workspace, uploaded to project storage, and set as the shared hero asset. Initial desktop and 390px mobile captures confirm that the visual is rendered in both layouts, with a dedicated small-screen framing rule rather than a hidden desktop-only visual.
+
+The Trust boundary and PxK route call-to-action sections now receive explicit light foreground, caption, and supporting-copy values on their dark teal panels, avoiding inherited muted text colours. The compact header was also reorganised so the brand remains left-aligned while the language, demo-session, and menu controls stay within reach on narrow screens.
+
+Focused visual captures confirmed the corrected panels: **A trust boundary**, its full decision-support statement, **The PxK route begins here**, the call-to-action heading, and supporting copy all render as high-contrast light text against dark teal backgrounds. The mobile viewport capture confirms the supplied phone image appears below the hero content instead of being omitted.

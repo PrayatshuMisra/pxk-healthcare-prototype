@@ -135,3 +135,10 @@
 - [x] Apply shared local-demo state or explicit account-only wording to remaining patient-facing protected features.
 - [x] Audit the history, patient, analytics, and provider-facing copy so local prototype records are never represented as secure accounts.
 - [x] Record desktop and mobile evidence for demo sign-in/out, approval-gated complaint entry, and local booking-preview boundaries.
+
+## Mobile Readability and Illustration Correction
+
+- [x] Restore sufficient foreground contrast for the Trust boundary and PxK route call-to-action text.
+- [x] Refine the mobile header navigation so controls remain legible, reachable, and visually ordered on narrow screens.
+- [x] Serve the supplied phone illustration as a managed asset and ensure it remains visible with an intentional crop on mobile.
+- [x] Validate contrast, navigation, and supplied-illustration visibility at desktop and 390px mobile sizes.
