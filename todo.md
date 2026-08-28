@@ -115,3 +115,23 @@
 ## Final Header Evidence
 
 - [x] Record the completed mobile navbar/account-control check and signed-in/sign-out/profile-to-history confirmation in the verification notes.
+
+## Local Demo Access and Approval Gate
+
+- [x] Replace the external authentication redirect with a visible local demo sign-in/sign-out state.
+- [x] Prevent the demo sign-in state from being represented as a real authenticated or secure patient account.
+- [x] Add an explicit required checklist before text or voice complaint intake, covering prototype use, consented browser processing, and non-diagnostic limits.
+- [x] Verify the approval checklist blocks typed and spoken complaints until all acknowledgements are given.
+
+## Local Demo Session Consistency
+
+- [x] Create a shared local demo-session state that updates header and protected-feature presentation without external authentication.
+- [x] Distinguish local demonstration history from secure saved account records throughout the app.
+- [x] Replace remaining external-account booking prompts with accurate local-demo boundaries and a non-persistent booking preview.
+- [x] Add unit coverage for demo-session state transitions and verify account-boundary copy in the browser.
+
+## Demo Record Boundary Audit
+
+- [x] Apply shared local-demo state or explicit account-only wording to remaining patient-facing protected features.
+- [x] Audit the history, patient, analytics, and provider-facing copy so local prototype records are never represented as secure accounts.
+- [x] Record desktop and mobile evidence for demo sign-in/out, approval-gated complaint entry, and local booking-preview boundaries.

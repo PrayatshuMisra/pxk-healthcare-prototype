@@ -1,11 +1,40 @@
-/** Community Wayfinding: microphone capture is explicit, consent-gated, and sends no inference beyond a verbatim transcription request. */
-import { useAuth } from "@/_core/hooks/useAuth";
-import { startLogin } from "@/const";
+/** Community Wayfinding: the demo uses only the browser's optional speech recogniser and never records or uploads audio. */
 import type { Language } from "@/data/mockData";
-import { trpc } from "@/lib/trpc";
-import { Mic, PauseCircle, Volume2 } from "lucide-react";
+import { Mic, PauseCircle } from "lucide-react";
 import { useRef, useState } from "react";
+
 type SpeechRecognitionInstance = { lang: string; continuous: boolean; interimResults: boolean; start: () => void; stop: () => void; onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null; onerror: ((event: { error: string }) => void) | null; onend: (() => void) | null };
 type SpeechWindow = Window & { SpeechRecognition?: new () => SpeechRecognitionInstance; webkitSpeechRecognition?: new () => SpeechRecognitionInstance };
 const speechLanguage: Record<Language, string> = { en: "en-IN", kn: "kn-IN", tulu: "kn-IN", kok: "kok-IN" };
-export function VoiceRecorder({ language, label = "Speak", onTranscript }: { language: Language; label?: string; onTranscript: (text: string) => void }) { const { isAuthenticated } = useAuth(); const [recording, setRecording] = useState(false); const [message, setMessage] = useState(""); const recorder = useRef<MediaRecorder | null>(null); const stream = useRef<MediaStream | null>(null); const clips = useRef<BlobPart[]>([]); const transcribe = trpc.voice.transcribe.useMutation({ onSuccess: (value) => { setMessage(`Heard: “${value.text}”`); onTranscript(value.text); }, onError: () => fallbackToBrowserSpeech() }); const fallbackToBrowserSpeech = () => { const BrowserSpeech = (window as SpeechWindow).SpeechRecognition || (window as SpeechWindow).webkitSpeechRecognition; if (!BrowserSpeech) { setMessage("We could not transcribe that clip. You can type or choose an option instead."); return; } const recognition = new BrowserSpeech(); recognition.lang = speechLanguage[language]; recognition.continuous = false; recognition.interimResults = false; recognition.onresult = (event) => { const text = event.results[0]?.[0]?.transcript?.trim(); if (text) { setMessage(`Heard: “${text}” (browser speech)`); onTranscript(text); } }; recognition.onerror = () => setMessage("Browser speech could not understand that. You can type or choose an option instead."); recognition.onend = () => setRecording(false); setRecording(true); setMessage("Trying browser speech recognition…"); recognition.start(); }; const stop = () => { recorder.current?.stop(); setRecording(false); }; const begin = async () => { if (!isAuthenticated) { startLogin(); return; } if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) { fallbackToBrowserSpeech(); return; } try { stream.current = await navigator.mediaDevices.getUserMedia({ audio: true }); const media = new MediaRecorder(stream.current, { mimeType: MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : undefined }); clips.current = []; media.ondataavailable = (event) => { if (event.data.size) clips.current.push(event.data); }; media.onstop = () => { stream.current?.getTracks().forEach((track) => track.stop()); const blob = new Blob(clips.current, { type: media.mimeType || "audio/webm" }); if (blob.size > 4 * 1024 * 1024) { setMessage("Please keep the voice clip under 4 MB."); return; } const reader = new FileReader(); reader.onloadend = () => transcribe.mutate({ audioBase64: String(reader.result || ""), mimeType: (blob.type === "audio/ogg" || blob.type === "audio/wav" || blob.type === "audio/mpeg" || blob.type === "audio/mp4" ? blob.type : "audio/webm") as "audio/webm", language, consentAcknowledged: true }); reader.readAsDataURL(blob); }; recorder.current = media; media.start(); setRecording(true); setMessage("Listening… tap stop when you finish."); } catch { fallbackToBrowserSpeech(); } }; return <div className="voice-control"><button type="button" className={`voice-button ${recording ? "voice-button--recording" : ""}`} onClick={recording ? stop : begin} disabled={transcribe.isPending} aria-pressed={recording}>{recording ? <PauseCircle /> : transcribe.isPending ? <Volume2 className="voice-spin" /> : <Mic />}<span>{recording ? "Stop recording" : transcribe.isPending ? "Transcribing…" : label}</span></button>{message && <p className="voice-message" role="status">{message}</p>}</div>; }
+
+export function VoiceRecorder({ language, label = "Speak", onTranscript }: { language: Language; label?: string; onTranscript: (text: string) => void }) {
+  const [recording, setRecording] = useState(false);
+  const [message, setMessage] = useState("");
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
+  const begin = () => {
+    const BrowserSpeech = (window as SpeechWindow).SpeechRecognition || (window as SpeechWindow).webkitSpeechRecognition;
+    if (!BrowserSpeech) {
+      setMessage("Browser speech recognition is unavailable here. You can type or select a visible option instead.");
+      return;
+    }
+    const recognition = new BrowserSpeech();
+    recognitionRef.current = recognition;
+    recognition.lang = speechLanguage[language];
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.onresult = (event) => {
+      const text = event.results[0]?.[0]?.transcript?.trim();
+      if (text) {
+        setMessage(`Heard: “${text}”`);
+        onTranscript(text);
+      }
+    };
+    recognition.onerror = () => setMessage("Browser speech could not understand that. You can type or choose an option instead.");
+    recognition.onend = () => { recognitionRef.current = null; setRecording(false); };
+    setRecording(true);
+    setMessage("Listening in your browser… tap stop when you finish.");
+    recognition.start();
+  };
+  const stop = () => recognitionRef.current?.stop();
+  return <div className="voice-control"><button type="button" className={`voice-button ${recording ? "voice-button--recording" : ""}`} onClick={recording ? stop : begin} aria-pressed={recording}>{recording ? <PauseCircle /> : <Mic />}<span>{recording ? "Stop listening" : label}</span></button>{message && <p className="voice-message" role="status">{message}</p>}</div>;
+}

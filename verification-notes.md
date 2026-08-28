@@ -35,3 +35,13 @@ The project image pack was created as a separate, deployment-safe ZIP and its ma
 The centered desktop navigation and responsive mobile header were visually reviewed. The user manually confirmed that the profile control opens Screening history and that the header transitions correctly through sign-out and sign-in states.
 
 At the 390px mobile breakpoint, the header presents compact language, profile/history, sign-out, brand, and menu controls without clipping. The user confirmed the signed-in profile-to-history route and the signed-out-to-signed-in transition in the live preview.
+
+## Local Demo Session and Approval Gate — 28 August 2026
+
+The header now exposes **Demo sign in** rather than an external identity-provider redirect. Its browser-local session state is shared with booking presentation and can be ended through the **End demo** control. The desktop header and the 390px mobile header were captured after this change; both retain readable navigation and a distinct demo-mode cue.
+
+Before PxK displays a typed complaint field or optional speech button, the user must select all three checklist entries: prototype-only use, consent to enter a sample concern in the browser, and the non-diagnostic clinical boundary. The consent record is versioned locally, and the accompanying unit tests verify that incomplete or legacy consent cannot unlock the flow.
+
+In local demo mode, booking produces a clearly marked, browser-local preview reference only. It does not contact a clinician, create a provider record, or create a patient account. The provider route explicitly keeps appointment records unavailable in local demo mode, preserving the protected-provider boundary.
+
+An automated Chromium walkthrough then confirmed the interactive boundary end to end. It selected **Demo sign in**, confirmed the visible **End demo** state, opened the three-item approval checklist, verified that typed complaint entry appeared only after all items were selected, and then confirmed **End demo** returned the header to **Demo sign in**. The same walkthrough reopened local demo mode, selected a fictional clinician, completed a sample booking, and confirmed the **Booking preview ready · local demo** state together with the explicit statement that nothing was sent to a clinic, provider, or external account.
